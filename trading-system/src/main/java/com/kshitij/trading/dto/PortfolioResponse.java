@@ -11,6 +11,17 @@ import java.util.Map;
 @AllArgsConstructor
 public class PortfolioResponse {
     private String traderId;
-    private Map<String, Integer> positions;      // stock -> quantity
-    private Map<String, Integer> sectorBreakdown; // sector -> total quantity
+    private Map<String, Integer> positions;
+    private Map<String, Integer> sectorBreakdown;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DirectAddResponse {
+        private String traderId;
+        private String stock;
+        private Integer oldQuantity;
+        private Integer newQuantity;
+        private String message;
+    }
 }
