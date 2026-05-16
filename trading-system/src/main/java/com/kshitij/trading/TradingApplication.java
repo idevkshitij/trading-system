@@ -9,5 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class TradingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TradingApplication.class, args);
+
 	}
 }
