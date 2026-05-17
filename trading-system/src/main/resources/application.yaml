@@ -4,6 +4,14 @@ server:
     threads:
       max: 200
       min-spare: 20
+    accesslog:
+      enabled: true
+      pattern: '%t %a "%r" %s %b %D'
+      directory: logs
+      prefix: access_log
+      suffix: .log
+      rotate: true
+      file-date-format: .yyyy-MM-dd
 
 spring:
   datasource:
@@ -16,6 +24,12 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
+      leak-detection-threshold: 60000
+      pool-name: TradingHikariPool
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
 
   jpa:
     hibernate:
@@ -28,8 +42,61 @@ spring:
           batch_versioned_data: true
         order_inserts: true
         order_updates: true
+        format_sql: false
+        generate_statistics: false
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
     defer-datasource-initialization: true
 
   sql:
     init:
       mode: always
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+  show-actuator: true
+  writer-with-default-pretty-printer: true
+
+# Logging Configuration
+logging:
+  # General log level
+  level:
+    root: INFO
+    com.kshitij.trading: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: WARN
+    com.zaxxer.hikari: WARN
+    org.springframework.boot: INFO
+
+  # File appender configuration
+  file:
+    name: logs/trading-system.log
+    path: logs
+    max-size: 100MB
+    max-history: 30
+    total-size-cap: 10GB
+
+  # Pattern for log messages
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, loggers, logfile
+  endpoint:
+    logfile:
+      enabled: true
+      external-file: logs/trading-system.log

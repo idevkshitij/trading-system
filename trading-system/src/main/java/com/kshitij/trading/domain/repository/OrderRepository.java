@@ -27,4 +27,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findById(Long id);
 
     List<Order> findByTraderAndStatus(Trader trader, OrderStatus status);
+
+    List<Order> findByTrader(Trader trader);
 }
